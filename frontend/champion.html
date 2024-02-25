@@ -22,9 +22,17 @@
             <small>${data.id}</small>
             <h1>${data.name}</h1>
             <h1>${data.type}</h1>
+            <button onclick="deleteChampion()">Delete</button>
             <a href="champions.html">Back</a>
             `
         })
         .catch((error) => console.log(error))
+
+        const deleteChampion = async () => {
+            let response = await fetch(`http://localhost:3000/champions/${id}`,{
+                method: "DELETE",
+            })   
+            window.location.href = "champions.html"
+        }
     </script>
 </html>
