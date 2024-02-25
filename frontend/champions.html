@@ -27,8 +27,10 @@
 
             data.forEach(champion => {
                 champions.innerHTML += `
-                <h3>${champion.name}</h3>
-                <p>${champion.type}</h3>
+                <a href="champion.html?id=${champion.id}">
+                    <h3>${champion.name}</h3>
+                    <p>${champion.type}</h3>
+                </a>
                 `
             })
         })
@@ -39,7 +41,7 @@
             let name = document.querySelector('input[name="name"]').value
             let type = document.querySelector('input[name="type"]').value
 
-            await fetch("http://localhost:3000/champions", {
+            let response = await fetch("http://localhost:3000/champions", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

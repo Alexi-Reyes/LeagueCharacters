@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>LeagueCharacters</title>
+    </head>
+
+    <body>
+        <div class="champion"></div>
+    </body>
+
+    <script>
+        let url = window.location.search
+        let id = new URLSearchParams(url).get("id")
+
+        fetch(`http://localhost:3000/champions/${id}`)     
+        .then((response) => response.json())
+        .then((data) => {
+            let champion = document.querySelector(".champion")
+            champion.innerHTML = `
+            <small>${data.id}</small>
+            <h1>${data.name}</h1>
+            <h1>${data.type}</h1>
+            <a href="champions.html">Back</a>
+            `
+        })
+        .catch((error) => console.log(error))
+    </script>
+</html>
