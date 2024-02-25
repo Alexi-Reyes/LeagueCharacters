@@ -8,31 +8,49 @@
 
     <body>
         <div class="champion"></div>
+
+        <script>
+            let token = localStorage.getItem("token")
+
+            let url = window.location.search
+            let id = new URLSearchParams(url).get("id")
+    
+            fetch(`http://localhost:3000/champions/${id}`)     
+            .then((response) => response.json())
+            .then((data) => {
+                let champion = document.querySelector(".champion")
+                if(!token) {
+                    champion.innerHTML = `
+                    <h1>${data.name}</h1>
+                    <h1>${data.type}</h1>
+                    <a href="champions.html">Back</a>
+                    `
+                } else {
+                    champion.innerHTML = `
+                    <h1>${data.name}</h1>
+                    <h1>${data.type}</h1>
+                    <button onclick="deleteChampion()">Delete</button>
+                    <a href="champions.html">Back</a>
+                    `
+                }
+            })
+            .catch((error) => console.log(error))
+
+            fetch("http://localhost:3000/user", {
+                headers: {
+                    "x-access-token": token
+                }
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                const deleteChampion = async () => {
+                    let response = await fetch(`http://localhost:3000/champions/${id}`,{
+                        method: "DELETE",
+                    })   
+                    window.location.href = "champions.html"
+                }
+            })
+            .catch((error) => console.log(error))
+        </script>
     </body>
-
-    <script>
-        let url = window.location.search
-        let id = new URLSearchParams(url).get("id")
-
-        fetch(`http://localhost:3000/champions/${id}`)     
-        .then((response) => response.json())
-        .then((data) => {
-            let champion = document.querySelector(".champion")
-            champion.innerHTML = `
-            <small>${data.id}</small>
-            <h1>${data.name}</h1>
-            <h1>${data.type}</h1>
-            <button onclick="deleteChampion()">Delete</button>
-            <a href="champions.html">Back</a>
-            `
-        })
-        .catch((error) => console.log(error))
-
-        const deleteChampion = async () => {
-            let response = await fetch(`http://localhost:3000/champions/${id}`,{
-                method: "DELETE",
-            })   
-            window.location.href = "champions.html"
-        }
-    </script>
 </html>

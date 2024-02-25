@@ -7,7 +7,6 @@
     </head>
 
     <body>
-        <div class="champions"></div>
         <form>
             <label for="name">Name</label>
             <input type="text" name="name" />
@@ -15,43 +14,60 @@
             <label for="type">Type</label>
             <input type="text" name="type" />
 
-            <button onclick="createChampion()">Add Champion</button>
+            <div class="create-champion">
+                <button onclick="event.preventDefault(); createChampion()">Add Champion</button>
+            </div>
         </form>
-    </body>
+        <div class="champions"></div>
 
-    <script>
-        fetch("http://localhost:3000/champions")
-        .then((response) => response.json())
-        .then((data) => {
-            let champions = document.querySelector(".champions")
-
-            data.forEach(champion => {
-                champions.innerHTML += `
-                <a href="champion.html?id=${champion.id}">
-                    <h3>${champion.name}</h3>
-                    <p>${champion.type}</h3>
-                </a>
-                `
-            })
-        })
-
-        const createChampion = async () => {
-            event.preventDefault()
-
-            let name = document.querySelector('input[name="name"]').value
-            let type = document.querySelector('input[name="type"]').value
-
-            let response = await fetch("http://localhost:3000/champions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify ({
-                    name: name,
-                    type: type
+        <script>
+            fetch("http://localhost:3000/champions")
+                .then((response) => response.json())
+                .then((data) => {
+                    let champions = document.querySelector(".champions")
+    
+                    data.forEach(champion => {
+                        champions.innerHTML += `
+                        <a href="champion.html?id=${champion.id}">
+                            <h3>${champion.name}</h3>
+                            <p>${champion.type}</h3>
+                        </a>
+                        `
+                    })
                 })
-            })
-            window.location.href = "champions.html"
-        }
-    </script>
+    
+                if(!token) {
+                    document.querySelector(".create-champion").innerHTML = `
+                    <button href="login.html">Add Champion</button>
+                    `
+                } else {
+                    fetch("http://localhost:3000/user", {
+                        headers: {
+                            "x-access-token": token
+                        }
+                    })
+                    .then((response) => response.json())
+                    .then(() => {
+                        const createChampion = async () => {
+                            event.preventDefault()
+            
+                            let name = document.querySelector('input[name="name"]').value
+                            let type = document.querySelector('input[name="type"]').value
+            
+                            let response = await fetch("http://localhost:3000/champions", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify ({name: name, type: type})
+                            })
+                            window.location.href = "champions.html"
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+                }
+        </script>
+    </body>
 </html>

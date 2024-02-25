@@ -1,5 +1,5 @@
 import express from "express";
-import { createChampion, getChampions, getChampion, updateChampion, deleteChampion } from "../controllers/ChampionsController.js";
+import { getChampions, getChampion, createChampion, updateChampion, deleteChampion } from "../controllers/ChampionsController.js";
 
 const router = express.Router();
 
