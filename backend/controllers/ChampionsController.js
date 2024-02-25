@@ -13,11 +13,9 @@ const createChampion = (req, res) => {
     })
     .then((champion) => {
         res.json(champion)
-        return
     })
     .then((error) => {
         res.json(error)
-        return
     })
 }
 
@@ -25,11 +23,9 @@ const getChampions = (req, res) => {
     prisma.champion.findMany()
     .then((champion) => {
         res.json(champion)
-        return
     })
     .then((error) => {
         res.json(error)
-        return
     })
 }
 
@@ -43,16 +39,31 @@ const getChampion = (req, res) => {
     })
     .then((champion) => {
         res.json(champion)
-        return
     })
     .then((error) => {
         res.json(error)
-        return
     })
 }
 
 const updateChampion = (req, res) => {
-    //
+    let id = Number(req.params.id)
+    let champion = req.body
+
+    prisma.champion.update({
+        where: {
+            id: id
+        },
+        data: {
+            name: champion.name,
+            type: champion.type
+        }
+    })
+    .then((champion) => {
+        res.json(champion)
+    })
+    .then((error) => {
+        res.json(error)
+    })
 }
 
 const deleteChampion = (req, res) => {
